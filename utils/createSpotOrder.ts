@@ -31,13 +31,13 @@ export default async function createSpotOrder(
   const safeAsk = safeNumber(token?.ask);
   const balance = safeNumber(acctBalance[currency]?.available) ?? 0;
   const price = tradeType === TRADE_TYPE.BID ? safeNumber(token?.bid) : safeNumber(token?.ask);
-  const quantity = Math.abs(balance / price) * 0.99 ?? 0;
+  const quantity = ((Math.abs(balance / price) * 0.99) / 3).toFixed(0) ?? 0;
   const clientOrderId = getClientOrderId().substring(0, 30);
   const spread = Math.abs(safeAsk - safeBid);
 
   verifyTrading(safeBid, safeAsk);
 
-  if (balance > price * quantity) {
+  if (balance > price * Number(quantity)) {
     const order = {
       symbol,
       price,
