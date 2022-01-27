@@ -4,7 +4,6 @@
   "description": "A simple bot to make you $$$$$",
   "main": "run.ts",
   "scripts": {
-    "start": "nodemon run.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "prettier --write '**/*.{ts,js,json,md}'"
   },
