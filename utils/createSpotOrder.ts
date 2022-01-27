@@ -115,7 +115,7 @@ export default async function createSpotOrder(
     return;
   }
 
-  if (balance < price * quantity) {
+  if (balance < price * Number(quantity)) {
     console.log('--------------------------------------------------------------');
     console.log(`⚠️\tYou do not have enought ${currency}`); // or second pair
     console.log('\tDepost more balance to execute order!');
