@@ -15,7 +15,7 @@ export default async function trade(acctBalance: Balance, token: Token): Promise
   let safeBid = safeNumber(BID);
   let safeAsk = safeNumber(ASK);
   const safeBidLimit = safeNumber(BID_LIMIT);
-  const safeAskLimit = safeNumber(ASK_LIMIT);
+  // const safeAskLimit = safeNumber(ASK_LIMIT);
   // let orderId;
 
   isValidSpread(safeBid, safeAsk);
@@ -26,28 +26,19 @@ export default async function trade(acctBalance: Balance, token: Token): Promise
       // refetch token volume, price, etc.
       const newToken = await getToken(token.symbol);
       safeAsk = safeNumber(newToken?.ask);
-      safeBid = safeNumber(newToken?.bid);
+      // safeBid = safeNumber(newToken?.bid);
 
-      //1) skip trade if the ask price is higher than our bid limit
-      //2) skip trade if the bid price is lower than our ask limit
-      // NOTE createSpotOrder returns orderId
-      if (safeBid) {
-        if (safeBidLimit) {
-          if (!(safeAsk > safeBidLimit) || !(safeNumber(BID) > safeBidLimit)) {
-            await createSpotOrder(newToken, acctBalance, resolve, TRADE_TYPE.BID);
-          }
-        } else {
-          await createSpotOrder(newToken, acctBalance, resolve, TRADE_TYPE.BID);
-        }
-      }
-      if (safeAsk) {
-        if (safeAskLimit) {
-          if (!(safeBid < safeAskLimit) || !(safeNumber(ASK) < safeAskLimit)) {
-            await createSpotOrder(newToken, acctBalance, resolve, TRADE_TYPE.ASK);
-          }
-        } else {
-          await createSpotOrder(newToken, acctBalance, resolve, TRADE_TYPE.ASK);
-        }
+      // price is within our buy limit
+      if (safeAsk < safeBidLimit) {
+        await createSpotOrder(newToken, acctBalance, resolve, TRADE_TYPE.BID);
+      } else {
+        console.log('--------------------------------------------------------------');
+        console.log(
+          `⚠️\tPrice (${safeAsk.toPrecision(
+            5
+          )}) higher than our bid limit (${safeBidLimit.toPrecision(5)})`
+        );
+        console.log('--------------------------------------------------------------');
       }
       // clearInterval(interval);
     }, pollInterval);

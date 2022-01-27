@@ -94,7 +94,10 @@ export default async function createSpotOrder(
         console.log(`--------------------------------------------------------------`);
 
         // update balance
-        acctBalance = await getBalance();
+        // TODO Uncomment this line out,
+        // After each trade we want to update the balance
+        // commented out for now to save extra ms on the request.
+        // acctBalance = await getBalance();
         resolve(isObject(res?.data?.data) ? res?.data.data : undefined);
       }
     } catch (error) {
@@ -110,7 +113,9 @@ export default async function createSpotOrder(
     }
 
     return;
-  } else {
+  }
+
+  if (balance < price * quantity) {
     console.log('--------------------------------------------------------------');
     console.log(`⚠️\tYou do not have enought ${currency}`); // or second pair
     console.log('\tDepost more balance to execute order!');
