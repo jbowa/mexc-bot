@@ -31,7 +31,7 @@ export default async function createSpotOrder(
   const safeAsk = safeNumber(token?.ask);
   const balance = safeNumber(acctBalance[currency]?.available) ?? 0;
   const price = tradeType === TRADE_TYPE.BID ? safeNumber(token?.bid) : safeNumber(token?.ask);
-  const quantity = ((Math.abs(balance / price) * 0.99) / 3).toFixed(0) ?? 0;
+  const quantity = (Math.abs(balance / price) / 3).toFixed(0) ?? 0;
   const clientOrderId = getClientOrderId().substring(0, 30);
   const spread = Math.abs(safeAsk - safeBid);
 
@@ -94,10 +94,7 @@ export default async function createSpotOrder(
         console.log(`--------------------------------------------------------------`);
 
         // update balance
-        // TODO Uncomment this line out,
-        // After each trade we want to update the balance
-        // commented out for now to save extra ms on the request.
-        // acctBalance = await getBalance();
+        acctBalance = await getBalance();
         resolve(isObject(res?.data?.data) ? res?.data.data : undefined);
       }
     } catch (error) {

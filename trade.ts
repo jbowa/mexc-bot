@@ -18,7 +18,7 @@ export default async function trade(acctBalance: Balance, token: Token): Promise
   // const safeAskLimit = safeNumber(ASK_LIMIT);
   // let orderId;
 
-  isValidSpread(safeBid, safeAsk);
+  // isValidSpread(safeBid, safeAsk);
   logStrategy(safeBid, safeAsk, token, acctBalance);
 
   return await new Promise(async (resolve) => {
